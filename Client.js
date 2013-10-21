@@ -1,6 +1,6 @@
 cleanString = function(string){return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">")}
 
-var socket = io.connect('<socket server>');
+var socket = io.connect('http://playmc.pw:1337');
 	socket.on('connect', function(){
 		socket.on('joinFromIRC', function(who, channel){
 			API.sendChat('/me ' + who + ' has joined ' + channel);
@@ -26,6 +26,13 @@ var socket = io.connect('<socket server>');
 		socket.on('-modeChange', function(by, mode, argument){
 			API.sendChat('/me ' + by + ' set ' + argument + ' to -' + mode);
 		});
+		socket.on('requestUsers', function(){
+			users = [];
+			for(var i in API.getUsers()){
+				if(API.getUsers()[i].username !== undefined) users.push(API.getUsers()[i].username);
+			}
+			socket.emit('sendUsers', users)
+		})
 		API.on(API.USER_JOIN, function(user){
 			socket.emit('joinFromPlug', user.username);
 		});
