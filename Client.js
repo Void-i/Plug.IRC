@@ -21,10 +21,10 @@ var socket = io.connect('<socket server>');
 			API.sendChat('/me ' + nick + ' was kicked from ' + channel + ' by ' + by);
 		});
 		socket.on('+modeChange', function(by, mode, argument){
-			API.sendChat('/me ' + by + ' set ' + argument + ' to ' + mode);
+			API.sendChat('/me ' + by + ' set ' + argument + ' to +' + mode);
 		});
 		socket.on('-modeChange', function(by, mode, argument){
-			API.sendChat('/me ' + by + ' set ' + argument + ' to ' + mode);
+			API.sendChat('/me ' + by + ' set ' + argument + ' to -' + mode);
 		});
 		API.on(API.USER_JOIN, function(user){
 			socket.emit('joinFromPlug', user.username);
