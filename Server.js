@@ -1,9 +1,10 @@
 var irc = require('irc');
 var io = require('socket.io').listen(1337);
-var channel = '#plug_fim';
-var autoOP = 'DerpTheBass';
-var name = 'FIMBot';
+var channel = '#';
+var autoOP = '';
+var name = '';
 var network = 'irc.freenode.net'
+op = 0;
 
 var bot = new irc.Client(network, name, { 
 	channels : [channel],
@@ -17,7 +18,7 @@ var bot = new irc.Client(network, name, {
 io.sockets.on('connection', function(socket) {
         bot.addListener('join', function(channel, who) {
             if (who !== name) socket.emit('joinFromIRC', who, channel);
-            if (who === autoOP) bot.send('MODE', channel, '+o', autoOP);
+            if (who === autoOP && op != 1) bot.send('MODE', channel, '+o', autoOP), op = 1;
         });
         bot.addListener('quit', function(who, reason, channel, message) {
             socket.emit('leaveFromIRC', who, channel);
@@ -52,7 +53,7 @@ io.sockets.on('connection', function(socket) {
             bot.say(channel, username + ' left the room');
         });
         socket.on('messageFromPlug', function(username, message, type){
-            if (type === 'message') bot.say(channel, username + ': ' + message);
+            if (type === 'message' || 'mention') bot.say(channel, username + ': ' + message);
             else if (type === 'emote') bot.say(channel, '*' + username + message);
         });
         socket.on('sendUsers', function(users){
