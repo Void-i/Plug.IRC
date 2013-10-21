@@ -1,10 +1,11 @@
 var irc = require('irc');
 var io = require('socket.io').listen(1337);
-var channel = '#plug_fim';
+var channel = '#';
 var autoOP = 'DerpTheBass';
-var name = 'FIMBot'
+var name = 'Plug.IRC';
+var network = 'irc.freenode.net'
 
-var bot = new irc.Client('irc.freenode.net', name, { 
+var bot = new irc.Client(network, name, { 
 	channels : [channel],
 	floodProtection: true,
 	floodProtectionDelay: 2000,
