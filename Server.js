@@ -23,8 +23,9 @@ io.sockets.on('connection', function(socket) {
             socket.emit('leaveFromIRC', who, channel);
         });
         bot.addListener('message', function(from, to, text, message) {
-            if (text.indexOf('!x') !== 0 && text.indexOf('!tellraw') !== 0) socket.emit('messageFromIRC', from, text);
+            if (text.indexOf('!x') !== 0 && text.indexOf('!tellraw') !== 0 && text.indexOf('!users') !== 0) socket.emit('messageFromIRC', from, text);
             else if (text.indexOf('!tellraw') === 0) socket.emit('tellRaw', text.substring(8));
+            else if(text.indexOf('!users') === 0) socket.emit('requestUsers');
         });
         bot.addListener('+mode', function(channel, by, mode, argument, message){
         	socket.emit('+modeChange', by, mode, argument);
@@ -54,8 +55,7 @@ io.sockets.on('connection', function(socket) {
             if (type === 'message') bot.say(channel, username + ': ' + message);
             else if (type === 'emote') bot.say(channel, '*' + username + message);
         });
+        socket.on('sendUsers', function(users){
+        	bot.say(channel, users.length + ' users currently in the room: ' + users.join(', '));
+        });
 });
-
-
-
-
