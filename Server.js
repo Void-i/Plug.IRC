@@ -1,8 +1,8 @@
 var irc = require('irc');
 var io = require('socket.io').listen(1337);
-var channel = '#';
+var channel = '#plug_fim';
 var autoOP = 'DerpTheBass';
-var name = 'Plug.IRC';
+var name = 'FIMBot';
 var network = 'irc.freenode.net'
 
 var bot = new irc.Client(network, name, { 
@@ -11,7 +11,7 @@ var bot = new irc.Client(network, name, {
 	floodProtectionDelay: 2000,
 	autoReconnect: true,
 	autoRejoin: true,
-	realName: 'Plug.IRC'
+	realName: 'Plug.IRC',
 });
 
 io.sockets.on('connection', function(socket) {
@@ -55,3 +55,7 @@ io.sockets.on('connection', function(socket) {
             else if (type === 'emote') bot.say(channel, '*' + username + message);
         });
 });
+
+
+
+
