@@ -1,7 +1,6 @@
 var irc = require('irc');
 var io = require('socket.io').listen(1337);
 var channel = '#';
-var autoOP = '';
 var name = '';
 var network = 'irc.freenode.net'
 op = 0;
@@ -18,21 +17,13 @@ var bot = new irc.Client(network, name, {
 io.sockets.on('connection', function(socket) {
         bot.addListener('join', function(channel, who) {
             if (who !== name) socket.emit('joinFromIRC', who, channel);
-            if (who === autoOP && op != 1) bot.send('MODE', channel, '+o', autoOP), op = 1;
         });
         bot.addListener('quit', function(who, reason, channel, message) {
             socket.emit('leaveFromIRC', who, channel);
         });
         bot.addListener('message', function(from, to, text, message) {
-            if (text.indexOf('!x') !== 0 && text.indexOf('!tellraw') !== 0 && text.indexOf('!users') !== 0) socket.emit('messageFromIRC', from, text);
-            else if (text.indexOf('!tellraw') === 0) socket.emit('tellRaw', text.substring(8));
+            if (text.indexOf('!x') !== 0 && text.indexOf('!users') !== 0) socket.emit('messageFromIRC', from, text);
             else if(text.indexOf('!users') === 0) socket.emit('requestUsers');
-        });
-        bot.addListener('+mode', function(channel, by, mode, argument, message){
-        	socket.emit('+modeChange', by, mode, argument);
-        });
-        bot.addListener('-mode', function(channel, by, mode, argument, message){
-        	socket.emit('-modeChange', by, mode, argument);
         });
         bot.addListener('nick', function(oldNick, newNick) {
             socket.emit('nickFromIRC', oldNick, newNick);
