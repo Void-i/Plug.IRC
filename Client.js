@@ -1,5 +1,3 @@
-cleanString = function(string){return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">")}
-
 var socket = io.connect('<socket server>');
 	socket.on('connect', function(){
 		socket.on('joinFromIRC', function(who, channel){
@@ -31,6 +29,6 @@ var socket = io.connect('<socket server>');
 			socket.emit('leaveFromPlug', user.username);
 		});
 		API.on(API.CHAT, function(data){
-			if(data.fromID != API.getUser().id) socket.emit('messageFromPlug', data.from, cleanString(data.message), data.type);
+			if(data.fromID != API.getUser().id) socket.emit('messageFromPlug', data.from, _.unescape(data.message), data.type);
 		});
 	});
