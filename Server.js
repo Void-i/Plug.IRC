@@ -3,7 +3,6 @@ var io = require('socket.io').listen(1337);
 var channel = '#';
 var name = '';
 var network = 'irc.freenode.net'
-op = 0;
 
 var bot = new irc.Client(network, name, { 
 	channels : [channel],
@@ -37,6 +36,9 @@ io.sockets.on('connection', function(socket) {
         bot.addListener('part', function(chanel, who, reason, message){
             socket.emit('leaveFromIRC', who, channel);
         });
+        bot.addListener('error', function(message) {
+    	    console.log('error: ', message);
+	});
         socket.on('joinFromPlug', function(username) {
             bot.say(channel, username + ' joined the room');
         });
