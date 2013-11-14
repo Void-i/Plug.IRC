@@ -29,7 +29,7 @@ Steps:
 6. Start up the server `node server.js`
 7. Copy the code from Client.js
 8. Configure Client.js so that <socket server> is replaced with the address and port of your server
-9. Paste Client.js into your browser's console or use this bookmarklet to run it <pre>javascript: (function () { $.getScript('https://raw.github.com/derpthebass/Plug.IRC/master/Client.js') }());</pre>
+9. Paste Client.js into your browser's console
 
 =
 ####Notes:
